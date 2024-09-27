@@ -1,65 +1,18 @@
 import 'dart:io';
-import 'package:document_scanner/upload_image.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';  // Import fluttertoast
 
-class ImagePickerScreen extends StatefulWidget {
-  @override
-  _ImagePickerScreenState createState() => _ImagePickerScreenState();
-}
+class ImageDisplayScreen extends StatelessWidget {
+  final File imageFile;
 
-class _ImagePickerScreenState extends State<ImagePickerScreen> {
-  File? _image;
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-
-      // Show toast message when the image is picked
-      Fluttertoast.showToast(
-        msg: "Image is captured",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-
-      // Navigate to the Image Display Screen
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ImageDisplayScreen(imageFile: _image!),
-        ),
-      );
-    }
-  }
+  ImageDisplayScreen({required this.imageFile});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Pick an Image')),
+      appBar: AppBar(title: Text('Image Display')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () => _pickImage(ImageSource.camera),
-              child: Text('Take a Picture'),
-            ),
-            ElevatedButton(
-              onPressed: () => _pickImage(ImageSource.gallery),
-              child: Text('Select from Gallery'),
-            ),
-          ],
-        ),
+        child: Image.file(imageFile), // Display the image here
       ),
     );
   }
 }
-
